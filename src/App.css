@@ -1,0 +1,12 @@
+
+.Auth-container{
+
+  background-image: url(./assets/da87cd52923ebecef90e1f43751cfebc.jpeg);
+  background-size: cover;
+  background-color: blanchedalmond;
+}
+.overlay{
+
+  background: linear-gradient(45deg, #4aa35a9f, rgba(0, 0, 0, 0.37));
+
+}
