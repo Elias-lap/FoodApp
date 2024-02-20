@@ -7,6 +7,13 @@ import { useState } from "react";
 
 // eslint-disable-next-line react/prop-types
 function Login({ saveAdminData }) {
+  // for password
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevState) => !prevState);
+  };
+  // //////////
   const [spinner, setSpinner] = useState(false);
   const navigate = useNavigate();
   const {
@@ -46,11 +53,14 @@ function Login({ saveAdminData }) {
   };
   const onSubmit = async (data) => {
     setSpinner(true); // Set spinner to true before making the API call
-  
+
     try {
-      const response = await axios.post("https://upskilling-egypt.com:443/api/v1/Users/Login", data);
+      const response = await axios.post(
+        "https://upskilling-egypt.com:443/api/v1/Users/Login",
+        data
+      );
       // Handle success response
-      localStorage.setItem("adminToken", response.data.token);
+      localStorage.setItem("adminToken", response?.data?.token);
       toast.success("Login successfully");
       navigate("/dashboard");
       saveAdminData();
@@ -61,7 +71,6 @@ function Login({ saveAdminData }) {
       setSpinner(false); // Set spinner back to false after the API call completes
     }
   };
-  
 
   return (
     <div className="row vh-100    justify-content-center  align-items-center">
@@ -101,7 +110,7 @@ function Login({ saveAdminData }) {
                   <i className="fa fa-key"></i>
                 </span>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   className="form-control"
                   placeholder="password"
                   {...register("password", {
@@ -109,6 +118,13 @@ function Login({ saveAdminData }) {
                     validate: validatePassword,
                   })}
                 />
+                <button
+                  className="btn btn-outline-secondary"
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                >
+                  <i className="fa-solid fa-eye"></i>
+                </button>
               </div>
               {errors.password && (
                 <div className="alert alert-danger ">
@@ -123,9 +139,7 @@ function Login({ saveAdminData }) {
               </div>
               <button type="submit" className=" btn btn-success w-100">
                 {spinner ? (
-                  <div className="spinner-border" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                  </div>
+                  <div className="spinner-border" role="status"></div>
                 ) : (
                   "Log in"
                 )}

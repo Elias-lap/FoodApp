@@ -22,6 +22,7 @@ function App() {
     let decodedToken = jwtDecode(encodedToken);
     setAdminData(decodedToken);
   };
+ 
   useEffect(() => {
     if (localStorage.getItem("adminToken")) {
       saveAdminData();
@@ -67,7 +68,7 @@ function App() {
       children: [
         {
           index: true,
-          element: <Home />,
+          element: <Home  adminData={adminData} />,
         },
         {
           path: "Recipes",

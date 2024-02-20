@@ -24,7 +24,7 @@ function ForgetPasword({saveAdminData}) {
     navigate('/ResetPasword')
     saveAdminData()
     }catch (error){
-      toast.error(error.response.data.message) 
+      toast.error(error?.response?.data?.message) 
 
     }finally{
       setSpinner(false)
@@ -73,7 +73,6 @@ function ForgetPasword({saveAdminData}) {
                         <button type="submit" className=" btn btn-success w-100">
                 {spinner ? (
                   <div className="spinner-border" role="status">
-                    <span className="visually-hidden">Loading...</span>
                   </div>
                 ) : (
                   "submit"
