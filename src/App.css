@@ -9,6 +9,24 @@
 
   background: linear-gradient(45deg, #4aa35a9f, rgba(0, 0, 0, 0.37));
 }
+
+.bgGray{
+  background-color: #F0FFEF;
+  box-sizing: border-box;
+  width: 97%;
+}
+.bg-gray th{
+  background-color: #E2E5EB !important;
+  padding-top: 30px !important;
+  padding-bottom: 30px !important;
+  color: #1F263E;
+}
+
+.w-10{
+  width: 60px;
+  height: 60px;
+
+}
 /* styled side bar */
 .home-sideBar{
   background-color: #1F263E;

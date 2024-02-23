@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import Header from "../../../SharedModule/components/Header/Header";
 import image from "../../../../assets/recipes.png";
-import imageDelete from "../../../../assets/Group 48102290.png";
+import imageDelete from "../../../../assets/Group 48102107.png"
 import { useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
@@ -203,7 +203,6 @@ function CategoriestList() {
                 defaultValue={nameItem}
                 className="form-control bg-body"
                 placeholder="Category Name"
-                // onChange={(e) => setNameItem(e.target.value)}
                 {...register("name", {
                   required: "name is required",
                 })}
@@ -277,7 +276,7 @@ function CategoriestList() {
           </div>
         </div>
 
-        <table className="table  ">
+        <table className="table table-responsive  ">
           <thead>
             <tr>
               <th scope="col">#</th>

@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import ProtectedRout from "./components/SharedModule/components/ProtectedRout/ProtectedRout";
 import ResetPassword from "./components/AuthModule/components/ResetPassword/ResetPassword";
+import CreatRecipes from "./components/SharedModule/components/CreatReacipes/CreatRecipes";
 function App() {
   const [adminData, setAdminData] = useState(null);
   const saveAdminData = () => {
@@ -71,7 +72,7 @@ function App() {
           element: <Home  adminData={adminData} />,
         },
         {
-          path: "Recipes",
+          path: "RecipesList",
           element: <RecipesList />,
         },
         {
@@ -81,6 +82,10 @@ function App() {
         {
           path: "categories",
           element: <CategoriestList />,
+        },
+        {
+          path: "CreatRecipes/:id?",
+          element: <CreatRecipes />,
         },
       ],
     },

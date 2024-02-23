@@ -14,6 +14,8 @@ function SideBar() {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+
   return (
     <>
       <Modal show={show} onHide={handleClose}>
@@ -49,7 +51,7 @@ function SideBar() {
             <MenuItem
               icon={<i className="fas fa-utensils" />
 }
-              component={<Link to="/dashboard/Recipes" />}
+              component={<Link to="/dashboard/RecipesList" />}
             >
               {" "}
               Recipes

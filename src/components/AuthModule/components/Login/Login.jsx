@@ -52,6 +52,7 @@ function Login({ saveAdminData }) {
     return true;
   };
   const onSubmit = async (data) => {
+    console.log(data)
     setSpinner(true); // Set spinner to true before making the API call
 
     try {
