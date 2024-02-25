@@ -22,35 +22,7 @@ function Login({ saveAdminData }) {
 
     formState: { errors },
   } = useForm();
-  const validatePassword = (value) => {
-    // Check if password is at least 6 characters long
-    if (value.length < 6) {
-      return "The password must be at least 6 characters long.";
-    }
 
-    // Check if password contains at least one lowercase letter
-    if (!/[a-z]/.test(value)) {
-      return "The password must include at least one lowercase letter.";
-    }
-
-    // Check if password contains at least one uppercase letter
-    if (!/[A-Z]/.test(value)) {
-      return "The password must include at least one uppercase letter.";
-    }
-
-    // Check if password contains at least one digit
-    if (!/\d/.test(value)) {
-      return "The password must include at least one digit.";
-    }
-
-    // Check if password contains at least one special character
-    if (!/[!@#$%^&*]/.test(value)) {
-      return "The password must include at least one special character.";
-    }
-
-    // Password meets all requirements
-    return true;
-  };
   const onSubmit = async (data) => {
     console.log(data)
     setSpinner(true); // Set spinner to true before making the API call
@@ -116,7 +88,12 @@ function Login({ saveAdminData }) {
                   placeholder="password"
                   {...register("password", {
                     required: "password is required ",
-                    validate: validatePassword,
+                    pattern: {
+                      value:
+                        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
+                      message:
+                        "Password must contain at least 8 characters, including upper and lowercase letters, and numbers",
+                    },
                   })}
                 />
                 <button
@@ -133,7 +110,9 @@ function Login({ saveAdminData }) {
                 </div>
               )}
               <div className=" d-flex w-100 justify-content-between mb-3 flex-wrap">
-                <span>Register Now ?</span>
+                <span>
+                <Link to={"/Register"}>Register Now ?</Link>
+                  </span>
                 <span>
                   <Link to={"/ForgetPasword"}>Forgot Password</Link>
                 </span>

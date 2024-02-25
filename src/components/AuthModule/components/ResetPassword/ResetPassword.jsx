@@ -94,7 +94,7 @@ function ResetPassword() {
                 <input
                   type="text"
                   className="form-control"
-                  placeholder=" OTP"
+                  placeholder="OTP"
                   {...register("seed", {
                     required: "OTP is required ",
                   })}

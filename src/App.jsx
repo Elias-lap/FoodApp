@@ -16,6 +16,8 @@ import { jwtDecode } from "jwt-decode";
 import ProtectedRout from "./components/SharedModule/components/ProtectedRout/ProtectedRout";
 import ResetPassword from "./components/AuthModule/components/ResetPassword/ResetPassword";
 import CreatRecipes from "./components/SharedModule/components/CreatReacipes/CreatRecipes";
+import Register from "./components/AuthModule/components/Register/Register";
+import VerifyEmail from "./components/AuthModule/components/verfyEmail/VerifyEmail";
 function App() {
   const [adminData, setAdminData] = useState(null);
   const saveAdminData = () => {
@@ -49,12 +51,20 @@ function App() {
           element: <Login />,
         },
         {
+          path: "Register",
+          element: <Register  saveAdminData={saveAdminData}/>,
+        },
+        {
           path: "ForgetPasword",
           element: <ForgetPasword saveAdminData={saveAdminData} />,
         },
         {
           path: "ResetPasword",
           element: <ResetPassword />,
+        },
+        {
+          path: "VerifyEmail",
+          element: <VerifyEmail/>,
         },
       ],
     },
@@ -80,8 +90,8 @@ function App() {
           element: <UserList />,
         },
         {
-          path: "categories",
-          element: <CategoriestList />,
+          path: "categoriesList",
+          element: <CategoriestList/>,
         },
         {
           path: "CreatRecipes/:id?",

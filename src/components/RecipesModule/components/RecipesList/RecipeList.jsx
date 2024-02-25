@@ -6,8 +6,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import NoDataImage from "../../../SharedModule/components/NoDataImage/NoDataImage";
 import { toast } from "react-toastify";
-import { Modal } from "react-bootstrap";
-import imageDelete from "../../../../assets/Nodata (2).png";
+import DeleteComponent from "../../../SharedModule/components/DeleteComponent/DeleteComponent";
 function RecipeList() {
   const RecipesItem = "Recipes Items";
   const paragraph =
@@ -38,7 +37,7 @@ function RecipeList() {
   const handleCloseDelete = () => setShowModalDelete(false);
   const handleShowDelete = () => setShowModalDelete(true);
   const [deleteItemId, setDeleteItemId] = useState(null); // State to hold the id of the item to be deleted
-  const DeleteItem = async (deleteItemId) => {
+  const DeleteItemRecip = async (deleteItemId) => {
     // setSpinner(true)
     try {
       const response = await axios.delete(
@@ -74,7 +73,7 @@ function RecipeList() {
   return (
     <>
       {/* Modal Delete  */}
-      <Modal show={showModalDelete} onHide={handleCloseDelete}>
+      {/* <Modal show={showModalDelete} onHide={handleCloseDelete}>
         <div className="w-80 d-flex justify-content-end mt-4 ">
           <span
             role="button"
@@ -103,8 +102,13 @@ function RecipeList() {
             </button>
           </div>
         </Modal.Body>
-      </Modal>
-
+      </Modal> */}
+      <DeleteComponent
+        showModalDelete={showModalDelete}
+        handleCloseDelete={handleCloseDelete}
+        deleteItemId={deleteItemId}
+        functionDelete={DeleteItemRecip}
+      />
       {/* End Modal Delete  */}
       <Header pathimage={image} title={RecipesItem} discrirtion={paragraph} />
       <div className="container-fluid w-100">
@@ -122,35 +126,35 @@ function RecipeList() {
               Add New Item <i className="fa-solid fa-arrow-right"></i>
             </button>
           </div>
-          <table className="table table-responsive text-center ">
-            <thead className="bg-info-subtle">
-              <tr className="bg-gray">
-                <th scope="col">#</th>
-                <th scope="col">Item Name</th>
-                <th scope="col">Image</th>
-                <th scope="col">Price</th>
-                <th scope="col">Descriptiopn</th>
-                <th scope="col">tag</th>
-                <th scope="col">Category</th>
-                <th scope="col"></th>
-              </tr>
-            </thead>
-            <tbody className=" text-center w-100 mx-auto">
-              {RecipList.length == 0 ? (
-                <div className=" bg-black w-100 ">
-                  <img className=" w-100 h-100" src={imageNoData} alt="image" />
-                </div>
-              ) : (
-                RecipList.map((recip) => {
+          {RecipList.length == 0 ? (
+            <div className="  w-100  text-center">
+              <img className=" w-75 " src={imageNoData} alt="image" />
+            </div>
+          ) : (
+            <table className="table-responsive text-center ">
+              <thead className="bg-info-subtle">
+                <tr className="bg-gray">
+                  <th scope="col">#</th>
+                  <th scope="col">Item Name</th>
+                  <th scope="col">Image</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Descriptiopn</th>
+                  <th scope="col">tag</th>
+                  <th scope="col">Category</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody className=" text-center w-100 mx-auto">
+                {RecipList.map((recip) => {
                   return (
-                    <>
+                
                       <tr key={recip.id}>
                         <th scope="row">{recip.id}</th>
                         <td>
                           {recip?.name == "undefined" ? "Recipe" : recip?.name}
                         </td>
                         <td className="w-10 text-center">
-                          {recip.imagePath ? (
+                          {recip.imagePath[0]? (
                             <img
                               className="w-100 h-100"
                               src={`https://upskilling-egypt.com/${recip.imagePath}`}
@@ -162,7 +166,7 @@ function RecipeList() {
                             </div>
                           )}
                         </td>
-                        <td>{recip?.price}</td>
+                        <td>{recip?.price}  $</td>
                         <td> {recip.description}</td>
                         <td> {recip.tag.name}</td>
                         <td>{recip?.category[0]?.name}</td>
@@ -186,20 +190,18 @@ function RecipeList() {
                                 <Link
                                   to={`/dashboard/CreatRecipes/${recip.id}`}
                                   className="fa fa-pen-to-square btn"
-                                >
-                            
-                                </Link>
+                                ></Link>
                               </div>
                             </ul>
                           </div>
                         </td>
                       </tr>
-                    </>
+                
                   );
-                })
-              )}
-            </tbody>
-          </table>
+                })}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </>

@@ -20,7 +20,7 @@ function CreatRecipes() {
       );
       setcategoriesList(categoriesList?.data?.data);
     } catch (error) {
-      console.log(error);
+      toast.error("An error occurred while fetching the category. Please try again later.");
     }
   };
   // 2 Get All tags from Api
@@ -37,7 +37,7 @@ function CreatRecipes() {
       );
       settagIdList(Tags?.data);
     } catch (error) {
-      console.log(error);
+      toast.error("An error occurred while fetching the tags. Please try again later.");
     }
   };
   // 3  // 1-Append Data To Form Data
@@ -54,14 +54,15 @@ function CreatRecipes() {
     formState: { errors },
   } = useForm();
   const appendToFormData = (data) => {
+    const recipeImageFile = data.recipeImage[0];
     let formData = new FormData();
     formData.append("name", data.name);
-    formData.append("price ", data.price);
-    formData.append("description ", data.description);
-    formData.append("tagId ", data.tagId);
-    formData.append("categoriesIds ", data.categoriesIds);
-    formData.append("recipeImage", data.recipeImage[0]);
-    return formData
+    formData.append("price", data.price);
+    formData.append("description", data.description);
+    formData.append("tagId", data.tagId);
+    formData.append("categoriesIds", data.categoriesIds);
+    formData.append("recipeImage", recipeImageFile);
+    return formData ;
   };
 
   const onSubmit = async (data) => {
@@ -76,7 +77,7 @@ function CreatRecipes() {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json", // Specify the content type of the request body
+            "Content-Type": "multiple/form-data", // Specify the content type of the request body
           },
         }
       );
@@ -85,7 +86,7 @@ function CreatRecipes() {
       toast.success("Add is successfully");
     } catch (error) {
       // Handle error
-      console.log(error);
+      toast.error("An error occurred while fetching the adding the Recipe. Please try again later.");
     } finally {
       setSpinner(false); // Set spinner back to false after the API call completes
       // setValue();
@@ -111,8 +112,9 @@ function CreatRecipes() {
          setValue("name", RecipList.data.name);
          setValue("price", RecipList.data.price);
          setValue("description", RecipList.data.description);
-         setValue("tagId", RecipList.data.tag.name);
+         setValue("tagId", RecipList.tag.name);
          setValue("categoriesIds", RecipList.category[0].name);
+         setValue("recipeImage", RecipList.recipeImage[0]);
       
     } catch (error) {
       console.log(error);
@@ -129,7 +131,7 @@ const onSubmitUpdate = async (data) => {
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json", // Specify the content type of the request body
+          "Content-Type": "multiple/form-data",  // Specify the content type of the request body
         },
       }
     );
@@ -147,8 +149,6 @@ const onSubmitUpdate = async (data) => {
     setSpinner(false);
   }
 };
-
-
   //  call data
   useEffect(() => {
   
@@ -159,136 +159,143 @@ const onSubmitUpdate = async (data) => {
 
   //
   return (
-    <div className=" container-fluid">
+    <div className=" container-fluid ">
       <Recipesheader bodyButton={"All Recipes"} LinkTo={"/dashboard/RecipesList"} />
 
-         <form onSubmit={handleSubmit(param.id ? onSubmitUpdate : onSubmit)}>
-        <div className="input-group my-1 w-75  ">
-          <input
-            type="text"
-            className="form-control bg-body"
-            placeholder="Enter recipe Name"
-            {...register("name", {
-              required: "name is required",
-            })}
-          />
-        </div>
-
-        {errors.name && (
-          <div className="alert alert-danger w-auto ">
-            {errors.name.message}
+      
+      
+          <div className=" d-flex justify-content-center mt-4 ">
+               <form  className=" w-75"  onSubmit={handleSubmit(param.id ? onSubmitUpdate : onSubmit)}>
+              <div className="input-group my-1 w-100  ">
+                <input
+                  type="text"
+                  className="form-control bg-body "
+                  placeholder="Enter recipe Name"
+                  {...register("name", {
+                    required: "name is required",
+                  })}
+                />
+              </div>
+            
+              {errors.name && (
+                <div className="alert alert-danger w-auto ">
+                  {errors.name.message}
+                </div>
+              )}
+              <div className="input-group w-100  d-flex justify-content-between ">
+                <select
+                  className="form-control "
+                  {...register("tagId", {
+                    required: "category is required",
+                  })}
+                >
+                  <option selected value>
+                    tag
+                    <i className="fa-solid fa-caret-down  "></i>
+                  </option>{" "}
+                  {/* Placeholder */}
+                  {tagIdList.map((tagId) => (
+                    <option key={tagId.id} value={tagId.id}>
+                      {tagId.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            
+              {errors.tagId && (
+                <div className="alert alert-danger w-auto ">
+                  {errors.tagId.message}
+                </div>
+              )}
+            
+              <div className="input-group my-1 w-100 ">
+                <input
+                  type="number"
+                  className="form-control bg-body"
+                  placeholder="price"
+                  {...register("price", {
+                    required: "price  is required",
+                  })}
+                />
+              </div>
+            
+              {errors.price && (
+                <div className="alert alert-danger w-auto ">
+                  {errors.price.message}
+                </div>
+              )}
+            
+              <div className="input-group my-1 w-100  ">
+                <select
+                  className="form-control bg-body "
+                  {...register("categoriesIds", {
+                    required: "category is required",
+                  })}
+                >
+                  <option selected value>
+                    category
+                  </option>{" "}
+                  {/* Placeholder */}
+                  {categoriesList.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            
+              {errors.categoriesIds && (
+                <div className="alert alert-danger w-auto ">
+                  {errors.categoriesIds.message}
+                </div>
+              )}
+              <div className="input-group my-1 w-100  ">
+                <input
+                
+                  type="file"
+                  className="form-control bg-body"
+                  {...register("recipeImage", {
+                    required: "Image is required",
+                  })}
+                />
+              </div>
+            
+              {errors.recipeImage && (
+                <div className="alert alert-danger w-auto ">
+                  {errors.recipeImage.message}
+                </div>
+              )}
+            
+              <div className="input-group my-1 w-100 ">
+                <textarea
+                  type="text"
+                  className="form-control bg-body"
+                  placeholder="description "
+                  {...register("description", {
+                    required: "description  is required",
+                  })}
+                />
+              </div>
+            
+              {errors.description && (
+                <div className="alert alert-danger w-auto ">
+                  {errors.description.message}
+                </div>
+              )}
+            
+              <div className=" ">
+                <button type="submit" className="btn btn-success">
+                  {spinner ? (
+                    <div className="spinner-border" role="status"></div>
+                  ) : (
+                    "Add"
+                  )}
+                </button>
+              </div>
+            </form>
           </div>
-        )}
-        <div className="input-group w-75  d-flex justify-content-between ">
-          <select
-            className="form-control "
-            {...register("tagId", {
-              required: "category is required",
-            })}
-          >
-            <option selected value>
-              tag
-              <i className="fa-solid fa-caret-down  "></i>
-            </option>{" "}
-            {/* Placeholder */}
-            {tagIdList.map((tagId) => (
-              <option key={tagId.id} value={tagId.id}>
-                {tagId.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {errors.tagId && (
-          <div className="alert alert-danger w-auto ">
-            {errors.tagId.message}
-          </div>
-        )}
-
-        <div className="input-group my-1 w-75  ">
-          <input
-            type="number"
-            className="form-control bg-body"
-            placeholder="price"
-            {...register("price", {
-              required: "price  is required",
-            })}
-          />
-        </div>
-
-        {errors.price && (
-          <div className="alert alert-danger w-auto ">
-            {errors.price.message}
-          </div>
-        )}
-
-        <div className="input-group my-1 w-75  ">
-          <select
-            className="form-control bg-body "
-            {...register("categoriesIds", {
-              required: "category is required",
-            })}
-          >
-            <option selected value>
-              categ
-            </option>{" "}
-            {/* Placeholder */}
-            {categoriesList.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {errors.categoriesIds && (
-          <div className="alert alert-danger w-auto ">
-            {errors.categoriesIds.message}
-          </div>
-        )}
-        <div className="input-group my-1 w-75  ">
-          <input
-            type="file"
-            className="form-control bg-body"
-            {...register("recipeImage", {
-              required: "Image is required",
-            })}
-          />
-        </div>
-
-        {errors.recipeImage && (
-          <div className="alert alert-danger w-auto ">
-            {errors.recipeImage.message}
-          </div>
-        )}
-
-        <div className="input-group my-1 w-75  ">
-          <textarea
-            type="text"
-            className="form-control bg-body"
-            placeholder="description "
-            {...register("description", {
-              required: "description  is required",
-            })}
-          />
-        </div>
-
-        {errors.description && (
-          <div className="alert alert-danger w-auto ">
-            {errors.description.message}
-          </div>
-        )}
-
-        <div className=" d-flex justify-content-end">
-          <button type="submit" className="btn btn-success">
-            {spinner ? (
-              <div className="spinner-border" role="status"></div>
-            ) : (
-              "Add"
-            )}
-          </button>
-        </div>
-      </form>
+          
+      
     </div>
   );
 }

@@ -43,59 +43,56 @@ function UserList() {
             <h3>Recipe Table Details</h3>
             <h5>You can check all details</h5>
           </div>
-
-        <div className=" p-4 table-responsive text-center ">
-            <table className="table text-center table-striped">
-              <thead className="bg-info-subtle">
-                <tr className="bg-gray">
-                  <th scope="col"> #</th>
-                  <th scope="col"> Name</th>
-                  <th scope="col">Email</th>
-                  <th scope="col">Image</th>
-                  <th scope="col"></th>
-                  
-                  <th scope="col">Phone</th>
-                  <th scope="col">Country</th>
-                </tr>
-              </thead>
-              <tbody>
-                {userList.length == 0 ? (
-                  
-                
-                <div className=" w-100 text-center">
-                    <img className=" w-100 h-100"  src={imageNoData} alt="image" />
-                        
-                </div>
-                
-                ) : (
-                  userList.map((user) => {
+          {userList.length == 0 ? (
+              <div className="  w-100  text-center">
+              <img className=" w-75 " src={imageNoData} alt="image" />
+            </div>
+          ) : (
+          
+              <table className="table-responsive  text-center ">
+                <thead className="bg-info-subtle">
+                  <tr className="bg-gray">
+                    <th scope="col"> #</th>
+                    <th scope="col"> Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Image</th>
+                    <th scope="col"></th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Country</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {userList.map((user) => {
                     return (
-                      <>
+                    
                         <tr key={user.id}>
                           <th scope="row">{user.id}</th>
                           <td>{user.userName}</td>
                           <td>{user.email}</td>
                           <td className="w-10 text-center">
                             {user.imagePath ? (
-                              <img className="w-100 h-100" src={`https://upskilling-egypt.com/${user.imagePath}`}></img>
+                              <img
+                                className="w-100 h-100"
+                                src={`https://upskilling-egypt.com/${user.imagePath}`}
+                              ></img>
                             ) : (
                               // <i className="fa-solid fa-user-secret"></i>
-                          <div className="w-100 h-100">
-                                <NoDataImage/>
-                          </div>
+                              <div className="w-100 h-100">
+                                <NoDataImage />
+                              </div>
                             )}
                           </td>
                           <td></td>
                           <td>{user.phoneNumber}</td>
                           <td>{user.country}</td>
                         </tr>
-                      </>
+                    
                     );
-                  })
-                )}
-              </tbody>
-            </table>
-        </div>
+                  })}
+                </tbody>
+              </table>
+          
+          )}
         </div>
       </div>
     </div>

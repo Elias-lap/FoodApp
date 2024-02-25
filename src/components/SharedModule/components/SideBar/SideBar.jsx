@@ -59,7 +59,7 @@ function SideBar() {
             <MenuItem 
             icon={<i className="fas fa-th-large"></i>
           }
-            component={<Link to="/dashboard/categories" />}>
+            component={<Link to="/dashboard/categoriesList" />}>
               {" "}
               categories
             </MenuItem>

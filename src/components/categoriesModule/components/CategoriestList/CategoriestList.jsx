@@ -1,22 +1,30 @@
 /* eslint-disable react/prop-types */
+import imageNoData from "../../../../assets/Nodata (2).png";
 import Header from "../../../SharedModule/components/Header/Header";
 import image from "../../../../assets/recipes.png";
-import imageDelete from "../../../../assets/Group 48102107.png"
 import { useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
-import NoDataImage from "../../../SharedModule/components/NoDataImage/NoDataImage";
+// import NoDataImage from "../../../SharedModule/components/NoDataImage/NoDataImage";
 import Modal from "react-bootstrap/Modal";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import DeleteComponent from "../../../SharedModule/components/DeleteComponent/DeleteComponent";
 
 function CategoriestList() {
+  // variables 
   const RecipesItem = "Categories List";
   const paragraph =
     "You can now add your items that any user can order it from the Application and you can edit";
-  // 1_ calling api  Get All categories Data ?
-  const token = localStorage.getItem("adminToken");
   const [categoriesList, setcategoriesList] = useState([]);
+  const token = localStorage.getItem("adminToken");
+  const [show, setShow] = useState(false);
+  const [spinner, setSpinner] = useState(false);
+  const [showModalDelete, setShowModalDelete] = useState(false);
+  const [deleteItemId, setDeleteItemId] = useState(null); // State to hold the id of the item to be deleted
+  const [nameItem, setNameItem] = useState("") // Update the nameItem state with the current item name;
+
+  // 1_ calling api  Get All categories Data ?
   const getData = async () => {
     try {
       let categoriesList = await axios.get(
@@ -29,19 +37,17 @@ function CategoriestList() {
       );
       setcategoriesList(categoriesList?.data?.data);
     } catch (error) {
-      console.log(error);
+      toast.error("An error occurred while fetching data. Please try again later.");
     }
   };
   //2_ Modal  of add new category//  functions
-  const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => {
-    setShow(true)
-    setNameItem(''); // Update the nameItem state with the current item name
-    setValue("name", ''); // Set the value of the "name" input field to the current item name
+    setShow(true);
+    setNameItem(""); // Update the nameItem state with the current item name
+    setValue("name", ""); // Set the value of the "name" input field to the current item name
   };
   // handel form in Modal add new category
-  const [spinner, setSpinner] = useState(false);
   const {
     register,
     handleSubmit,
@@ -53,6 +59,10 @@ function CategoriestList() {
   const onSubmit = async (data) => {
     setSpinner(true); // Set spinner to true before making the API call
     try {
+      if (!data.name || !/^[a-zA-Z0-9\s]+$/.test(data.name)) {
+        toast.error("Invalid category name.")
+        return;
+      }
       const response = await axios.post(
         "https://upskilling-egypt.com/api/v1/Category/",
         data, // The data to be sent in the request body
@@ -63,12 +73,13 @@ function CategoriestList() {
           },
         }
       );
-      console.log(response.data)
+      console.log(response.data);
       // Handle success response
       toast.success("Add is successfully");
     } catch (error) {
       // Handle error
       console.log(error);
+      toast.error("An error occurred while adding the category. Please try again later.");
     } finally {
       setSpinner(false); // Set spinner back to false after the API call completes
       handleClose();
@@ -77,10 +88,8 @@ function CategoriestList() {
     }
   };
   // 3_ Delete data  from  all category
-  const [showModalDelete, setShowModalDelete] = useState(false);
   const handleCloseDelete = () => setShowModalDelete(false);
   const handleShowDelete = () => setShowModalDelete(true);
-  const [deleteItemId, setDeleteItemId] = useState(null); // State to hold the id of the item to be deleted
   const DeleteItem = async (deleteItemId) => {
     try {
       const response = await axios.delete(
@@ -109,18 +118,22 @@ function CategoriestList() {
   // End Delete Functions
 
   // 4 - update Data Modal category
-  const [nameItem, setNameItem] = useState("");
   const [showModalUpdate, setShowModalUpdate] = useState(false);
   const handleCloseshowModalUpdate = () => {
-    setShowModalUpdate(false)};
+    setShowModalUpdate(false);
+  };
   const handleShowshowModalUpdate = (name) => {
-    setShowModalUpdate(true)
+    setShowModalUpdate(true);
     setNameItem(name); // Update the nameItem state with the current item name
     setValue("name", name); // Set the value of the "name" input field to the current item name
-  }
+  };
 
   const Updateitem = async (data) => {
     try {
+      if (!data.name || !/^[a-zA-Z0-9\s]+$/.test(data.name)) {
+        toast.error("Invalid category name.")
+        return;
+      }
       const response = await axios.put(
         `https://upskilling-egypt.com:443/api/v1/Category/${deleteItemId}`,
         data,
@@ -137,7 +150,7 @@ function CategoriestList() {
       toast.success("update is successfully");
     } catch (error) {
       // Handle error
-      console.log(error);
+      toast.error("An error occurred while updating the category. Please try again later.");
     } finally {
       setSpinner(false); // Set spinner back to false after the API call completes
       handleCloseshowModalUpdate();
@@ -228,36 +241,12 @@ function CategoriestList() {
       </Modal>
       {/* end Modal of update new category  */}
       {/* Modal Delete start   */}
-      <Modal show={showModalDelete} onHide={handleCloseDelete}>
-        <div className="w-80 d-flex justify-content-end mt-4 ">
-          <span
-            role="button"
-            onClick={() => handleCloseDelete()}
-            className=" iconClose  d-flex fa fa-close   text-danger "
-          ></span>
-        </div>
-        <Modal.Body>
-          <div className="text-center">
-            <img src={imageDelete} alt="" />
-            <h5>Delete This Category ?</h5>
-            <p className="text-secondary">
-              are you sure you want to delete this item ? if you are sure just
-              click on delete it
-            </p>
-          </div>
-
-          <div className="text-end w-100">
-            <button
-              onClick={() => {
-                DeleteItem(deleteItemId);
-              }}
-              className=" btn btn-outline-danger "
-            >
-              Delete This item
-            </button>
-          </div>
-        </Modal.Body>
-      </Modal>
+      <DeleteComponent
+        showModalDelete={showModalDelete}
+        handleCloseDelete={handleCloseDelete}
+        deleteItemId={deleteItemId}
+        functionDelete={DeleteItem}
+      />
       {/* end Modal Delete */}
       <div>
         <Header pathimage={image} title={RecipesItem} discrirtion={paragraph} />
@@ -276,7 +265,7 @@ function CategoriestList() {
           </div>
         </div>
 
-        <table className="table table-responsive  ">
+        <table className=" table-responsive  text-center" >
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -284,9 +273,9 @@ function CategoriestList() {
               <th scope="col">actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody >
             {categoriesList.length == 0 ? (
-              <NoDataImage />
+              <img src={imageNoData} alt="" />
             ) : (
               categoriesList.map((item) => {
                 return (
@@ -297,20 +286,18 @@ function CategoriestList() {
                       <button
                         onClick={() => {
                           handleShowshowModalUpdate(item.name),
-                           setDeleteItemId(item.id);
-                           setNameItem(item.name)
+                            setDeleteItemId(item.id);
+                          setNameItem(item.name);
                         }}
                         className="btn btn-success me-1 mb-1"
                       >
                         update
-                        
                         <i className=" ms-1 fa-solid fa-pen-to-square"></i>
                       </button>
                       <button
                         className="btn btn-danger "
                         onClick={() => {
-                          handleShowDelete(),
-                           setDeleteItemId(item.id);
+                          handleShowDelete(), setDeleteItemId(item.id);
                         }}
                       >
                         Delete
