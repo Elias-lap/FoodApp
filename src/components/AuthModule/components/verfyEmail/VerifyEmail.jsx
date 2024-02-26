@@ -38,7 +38,7 @@ function VerifyEmail() {
 
   return (
     <div className="row  vh-100  justify-content-center  align-items-center">
-      <div className=" col-md-5  h-75 overflow-auto    bg-white">
+      <div className=" col-md-5  overflow-auto    bg-white">
         <div className="   px-5 py-4 rounded-3 ">
           <div className="logo-cont  text-center    ">
             <img src={logo} alt={logo} className="w-50   h-25" />
@@ -90,7 +90,7 @@ function VerifyEmail() {
               )}
             
       
-              <button type="submit" className=" btn btn-success w-100">
+              <button type="submit" className=" btn btn-success w-100 my-3">
                 {spinner ? (
                   <div className="spinner-border" role="status"></div>
                 ) : (

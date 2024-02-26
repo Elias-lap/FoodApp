@@ -112,9 +112,9 @@ function CreatRecipes() {
          setValue("name", RecipList.data.name);
          setValue("price", RecipList.data.price);
          setValue("description", RecipList.data.description);
-         setValue("tagId", RecipList.tag.name);
-         setValue("categoriesIds", RecipList.category[0].name);
-         setValue("recipeImage", RecipList.recipeImage[0]);
+         setValue("tagId", RecipList.data.tag.id);
+         setValue("categoriesIds", RecipList.data.category[0].id);
+         setValue("recipeImage", RecipList.imagePath);
       
     } catch (error) {
       console.log(error);

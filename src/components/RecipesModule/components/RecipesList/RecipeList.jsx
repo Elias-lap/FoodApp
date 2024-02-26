@@ -1,7 +1,7 @@
 import Header from "../../../SharedModule/components/Header/Header";
 import image from "../../../../assets/recipes.png";
 import imageNoData from "../../../../assets/Nodata (2).png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import NoDataImage from "../../../SharedModule/components/NoDataImage/NoDataImage";
@@ -11,11 +11,9 @@ function RecipeList() {
   const RecipesItem = "Recipes Items";
   const paragraph =
     "You can now add your items that any user can order it from the Application and you can edit";
-  let navigate = useNavigate();
   // Get All Recipes ?/////////////////////////////////////////////////////
   const token = localStorage.getItem("adminToken");
-  const [RecipList, setRecipList] = useState([]);
-
+  const [RecipeList, setRecipeList] = useState([]);
   const getData = async () => {
     try {
       let RecipList = await axios.get(
@@ -26,19 +24,19 @@ function RecipeList() {
           },
         }
       );
-      setRecipList(RecipList?.data?.data);
+      setRecipeList(RecipList?.data?.data);
     } catch (error) {
       console.log(error);
     }
   };
   //   //  Delete data  from  all Recipe
-  // const [spinner, setSpinner] = useState(false);
+  const [spinner, setSpinner] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
   const handleCloseDelete = () => setShowModalDelete(false);
   const handleShowDelete = () => setShowModalDelete(true);
   const [deleteItemId, setDeleteItemId] = useState(null); // State to hold the id of the item to be deleted
-  const DeleteItemRecip = async (deleteItemId) => {
-    // setSpinner(true)
+  const deleteItemRecip = async (deleteItemId) => {
+    setSpinner(true)
     try {
       const response = await axios.delete(
         `https://upskilling-egypt.com:443/api/v1/Recipe/${deleteItemId}
@@ -53,14 +51,15 @@ function RecipeList() {
       );
       console.log(response.data);
       // Handle success response
-      toast.success("Delete is successfully");
+      toast.success("The selected item has been successfully deleted.");
+      handleCloseDelete();
     } catch (error) {
       // Handle error
-      console.log(error);
-    } finally {
-      // setSpinner(false); // Set spinner back to false after the API call completes
-      handleCloseDelete();
-      getData();
+      toast.error("Failed to delete data. Please try again later.");
+    
+
+    }finally{
+      setSpinner(false)
     }
   };
 
@@ -107,10 +106,11 @@ function RecipeList() {
         showModalDelete={showModalDelete}
         handleCloseDelete={handleCloseDelete}
         deleteItemId={deleteItemId}
-        functionDelete={DeleteItemRecip}
+        functionDelete={deleteItemRecip}
+        spinner={spinner}
       />
       {/* End Modal Delete  */}
-      <Header pathimage={image} title={RecipesItem} discrirtion={paragraph} />
+      <Header pathimage={image} title={RecipesItem} description={paragraph} />
       <div className="container-fluid w-100">
         <div className="row  mx-auto rounded-3 mt-3  justify-content-between ">
           <div className="col-md-6">
@@ -119,14 +119,12 @@ function RecipeList() {
           </div>
 
           <div className="col-md-4  d-flex justify-content-end align-items-sm-start ">
-            <button
-              onClick={() => navigate("/dashboard/CreatRecipes")}
-              className="btn btn-success"
-            >
-              Add New Item <i className="fa-solid fa-arrow-right"></i>
-            </button>
+            <Link  className="btn btn-success " to={"/dashboard/CreatRecipes"}>
+            Add New Item <i className="fa-solid fa-arrow-right"></i>
+            </Link>
+          
           </div>
-          {RecipList.length == 0 ? (
+          {RecipeList.length == 0 ? (
             <div className="  w-100  text-center">
               <img className=" w-75 " src={imageNoData} alt="image" />
             </div>
@@ -145,7 +143,7 @@ function RecipeList() {
                 </tr>
               </thead>
               <tbody className=" text-center w-100 mx-auto">
-                {RecipList.map((recip) => {
+                {RecipeList.map((recip) => {
                   return (
                 
                       <tr key={recip.id}>
