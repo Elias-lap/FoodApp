@@ -14,19 +14,75 @@ function RecipeList() {
   // Get All Recipes ?/////////////////////////////////////////////////////
   const token = localStorage.getItem("adminToken");
   const [RecipeList, setRecipeList] = useState([]);
-  const getData = async () => {
+  const [SearchName, setSearchName] = useState(" ");
+  const [SearchByTag, setSearchByTag] = useState(" ");
+  const [SearchByCat, setSearchByCat] = useState(" ");
+  const [Pagination, setPagination] = useState([]);
+  const getData = async (pageNumber, pagesize, Name, ByTag, ByCat) => {
     try {
       let RecipList = await axios.get(
-        "https://upskilling-egypt.com:443/api/v1/Recipe/?pageSize=10&pageNumber=1",
+        `https://upskilling-egypt.com:443/api/v1/Recipe/`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: {
+            pageNumber: pageNumber,
+            pageSize: pagesize,
+            name: Name,
+            tagId: ByTag,
+            categoryId: ByCat,
+          },
+        }
+      );
+      setRecipeList(RecipList?.data?.data);
+      setPagination(
+        Array(RecipList?.data?.totalNumberOfPages)
+          .fill()
+          .map((_, i) => i + 1)
+      );
+      
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // 1 - get categories for serach
+  const [categoriesList, setcategoriesList] = useState([]);
+  const getDataCategories = async () => {
+    try {
+      let categoriesList = await axios.get(
+        "https://upskilling-egypt.com/api/v1/Category/?pageSize=10&pageNumber=1",
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      setRecipeList(RecipList?.data?.data);
+      setcategoriesList(categoriesList?.data?.data);
     } catch (error) {
-      console.log(error);
+      toast.error(
+        "An error occurred while fetching the category. Please try again later."
+      );
+    }
+  };
+  // 2 Get All tags from Api
+  const [tagIdList, settagIdList] = useState([]);
+  const getDatatagIdList = async () => {
+    try {
+      let Tags = await axios.get(
+        "https://upskilling-egypt.com:443/api/v1/tag/",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      settagIdList(Tags?.data);
+    } catch (error) {
+      toast.error(
+        "An error occurred while fetching the tags. Please try again later."
+      );
     }
   };
   //   //  Delete data  from  all Recipe
@@ -36,7 +92,7 @@ function RecipeList() {
   const handleShowDelete = () => setShowModalDelete(true);
   const [deleteItemId, setDeleteItemId] = useState(null); // State to hold the id of the item to be deleted
   const deleteItemRecip = async (deleteItemId) => {
-    setSpinner(true)
+    setSpinner(true);
     try {
       const response = await axios.delete(
         `https://upskilling-egypt.com:443/api/v1/Recipe/${deleteItemId}
@@ -53,55 +109,39 @@ function RecipeList() {
       // Handle success response
       toast.success("The selected item has been successfully deleted.");
       handleCloseDelete();
+      getData()
     } catch (error) {
       // Handle error
       toast.error("Failed to delete data. Please try again later.");
-    
-
-    }finally{
-      setSpinner(false)
+    } finally {
+      setSpinner(false);
     }
   };
 
-  //  ///////////call Api
+  // functions for search and Filters
+  const SearchByName = (e) => {
+    setSearchName(e.target.value);
+    getData(1, 10, e.target.value, SearchByTag, SearchByCat);
+  };
+  const SearchByCatFun = (e) => {
+    setSearchByCat(e.target.value);
+    getData(1, 10, SearchName, SearchByTag, e.target.value);
+  };
+  const SearchByTagFun = (e) => {
+    setSearchByTag(e.target.value);
+    getData(1, 10, SearchName, e.target.value, SearchByCat);
+  };
 
+  //  ///////////call Api
   useEffect(() => {
-    getData();
+    getData(1, 10);
+    getDatatagIdList();
+    getDataCategories();
   }, []);
 
   return (
     <>
-      {/* Modal Delete  */}
-      {/* <Modal show={showModalDelete} onHide={handleCloseDelete}>
-        <div className="w-80 d-flex justify-content-end mt-4 ">
-          <span
-            role="button"
-            onClick={() => handleCloseDelete()}
-            className=" iconClose  d-flex fa fa-close   text-danger "
-          ></span>
-        </div>
-        <Modal.Body>
-          <div className="text-center">
-            <img src={imageDelete} alt="" />
-            <h5>Delete This Category ?</h5>
-            <p className="text-secondary">
-              are you sure you want to delete this item ? if you are sure just
-              click on delete it
-            </p>
-          </div>
 
-          <div className="text-end w-100">
-            <button
-              onClick={() => {
-                DeleteItem(deleteItemId);
-              }}
-              className=" btn btn-outline-danger "
-            >
-              Delete This item
-            </button>
-          </div>
-        </Modal.Body>
-      </Modal> */}
       <DeleteComponent
         showModalDelete={showModalDelete}
         handleCloseDelete={handleCloseDelete}
@@ -119,11 +159,71 @@ function RecipeList() {
           </div>
 
           <div className="col-md-4  d-flex justify-content-end align-items-sm-start ">
-            <Link  className="btn btn-success " to={"/dashboard/CreatRecipes"}>
-            Add New Item <i className="fa-solid fa-arrow-right"></i>
+            <Link className="btn btn-success " to={"/dashboard/CreatRecipes"}>
+              Add New Item <i className="fa-solid fa-arrow-right"></i>
             </Link>
-          
+            {/* filter  */}
           </div>
+
+          <div className="row">
+            <div className="col-md-6 ">
+              <div className="input-group mb-3">
+                {/* <i className="fa-solid fa-magnifying-glass "></i> */}
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search By Name "
+                  aria-label="Username"
+                  onChange={(e) => {
+                    SearchByName(e);
+                  }}
+                />
+              </div>
+            </div>
+            <div className=" col-md-3">
+              <div className="input-group  ">
+                <select
+                  className="form-control "
+                  onChange={(e) => {
+                    SearchByTagFun(e);
+                  }}
+                >
+                  <option selected>
+                    Search By tag
+                    <i className="fa-solid fa-caret-down  "></i>
+                  </option>{" "}
+                  {/* Placeholder */}
+                  {tagIdList?.map((tagId) => (
+                    <option key={tagId.id} value={tagId.id}>
+                      {tagId.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className=" col-md-3">
+              <div className="input-group ">
+                <select
+                  onChange={(e) => {
+                    SearchByCatFun(e);
+                  }}
+                  className="form-control bg-body "
+                >
+                  <option selected value>
+                    category
+                  </option>{" "}
+                  {/* Placeholder */}
+                  {categoriesList.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+
           {RecipeList.length == 0 ? (
             <div className="  w-100  text-center">
               <img className=" w-75 " src={imageNoData} alt="image" />
@@ -145,62 +245,90 @@ function RecipeList() {
               <tbody className=" text-center w-100 mx-auto">
                 {RecipeList.map((recip) => {
                   return (
-                
-                      <tr key={recip.id}>
-                        <th scope="row">{recip.id}</th>
-                        <td>
-                          {recip?.name == "undefined" ? "Recipe" : recip?.name}
-                        </td>
-                        <td className="w-10 text-center">
-                          {recip.imagePath[0]? (
-                            <img
-                              className="w-100 h-100"
-                              src={`https://upskilling-egypt.com/${recip.imagePath}`}
-                            ></img>
-                          ) : (
-                            // <i className="fa-solid fa-user-secret"></i>
-                            <div className="w-100 h-100">
-                              <NoDataImage />
-                            </div>
-                          )}
-                        </td>
-                        <td>{recip?.price}  $</td>
-                        <td> {recip.description}</td>
-                        <td> {recip.tag.name}</td>
-                        <td>{recip?.category[0]?.name}</td>
-                        <td>
-                          <div className="btn-group">
-                            <button
-                              className="btn btn-secondary  dropdown-toggle"
-                              type="button"
-                              data-bs-toggle="dropdown"
-                              aria-expanded="false"
-                            ></button>
-                            <ul className="dropdown-menu ">
-                              <div className="d-flex flex-column ">
-                                <button
-                                  onClick={() => {
-                                    handleShowDelete();
-                                    setDeleteItemId(recip.id);
-                                  }}
-                                  className="fa fa-trash btn  "
-                                ></button>
-                                <Link
-                                  to={`/dashboard/CreatRecipes/${recip.id}`}
-                                  className="fa fa-pen-to-square btn"
-                                ></Link>
-                              </div>
-                            </ul>
+                    <tr key={recip.id}>
+                      <th scope="row">{recip.id}</th>
+                      <td>
+                        {recip?.name == "undefined" ? "Recipe" : recip?.name}
+                      </td>
+                      <td className="w-10 text-center">
+                        {recip.imagePath[0] ? (
+                          <img
+                            className="w-100 h-100"
+                            src={`https://upskilling-egypt.com/${recip.imagePath}`}
+                          ></img>
+                        ) : (
+                          // <i className="fa-solid fa-user-secret"></i>
+                          <div className="w-100 h-100">
+                            <NoDataImage />
                           </div>
-                        </td>
-                      </tr>
-                
+                        )}
+                      </td>
+                      <td>{recip?.price} $</td>
+                      <td> {recip.description}</td>
+                      <td> {recip.tag.name}</td>
+                      <td>{recip?.category[0]?.name}</td>
+                      <td>
+                        <div className="btn-group">
+                          <button
+                            className="btn btn-secondary  dropdown-toggle"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          ></button>
+                          <ul className="dropdown-menu ">
+                            <div className="d-flex flex-column ">
+                              <button
+                                onClick={() => {
+                                  handleShowDelete();
+                                  setDeleteItemId(recip.id);
+                                }}
+                                className="fa fa-trash btn  "
+                              ></button>
+                              <Link
+                                to={`/dashboard/CreatRecipes/${recip.id}`}
+                                className="fa fa-pen-to-square btn"
+                              ></Link>
+                            </div>
+                          </ul>
+                        </div>
+                      </td>
+                    </tr>
                   );
                 })}
               </tbody>
             </table>
           )}
         </div>
+        <nav aria-label="Page navigation example">
+          <ul className="pagination">
+            <li className="page-item">
+              <a className="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">«</span>
+                <span className="sr-only">Previous</span>
+              </a>
+            </li>
+            {Pagination.map((pag) => {
+              return (
+                <li 
+                onClick={()=>{
+                  getData(pag , 10)
+                }}
+                key={pag} className="page-item">
+                  <a  className="page-link">
+                    {pag}
+                  </a>
+                </li>
+              );
+            })}
+
+            <li className="page-item">
+              <a className="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">»</span>
+                <span className="sr-only">Next</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </>
   );

@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import DeleteComponent from "../../../SharedModule/components/DeleteComponent/DeleteComponent";
 
 function CategoriestList() {
-  // variables 
+  // variables
   const RecipesItem = "Categories List";
   const paragraph =
     "You can now add your items that any user can order it from the Application and you can edit";
@@ -22,22 +22,37 @@ function CategoriestList() {
   const [spinner, setSpinner] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null); // State to hold the id of the item to be deleted
-  const [nameItem, setNameItem] = useState("") // Update the nameItem state with the current item name;
+  const [nameItem, setNameItem] = useState(""); // Update the nameItem state with the current item name;
+  // eslint-disable-next-line no-unused-vars
+  const [SearchName, setSearchName] = useState("");
+  const [Pagination, setPagination] = useState([]);
 
   // 1_ calling api  Get All categories Data ?
-  const getData = async () => {
+  const getData = async (pageNumber, pagesize, Name) => {
     try {
       let categoriesList = await axios.get(
-        "https://upskilling-egypt.com/api/v1/Category/?pageSize=10&pageNumber=1",
+        "https://upskilling-egypt.com/api/v1/Category/",
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          params: {
+            pageNumber: pageNumber,
+            pageSize: pagesize,
+            name: Name,
+          },
         }
       );
       setcategoriesList(categoriesList?.data?.data);
+      setPagination(
+        Array(categoriesList?.data?.totalNumberOfPages)
+          .fill()
+          .map((_, i) => i + 1)
+      );
     } catch (error) {
-      toast.error("An error occurred while fetching data. Please try again later.");
+      toast.error(
+        "An error occurred while fetching data. Please try again later."
+      );
     }
   };
   //2_ Modal  of add new category//  functions
@@ -60,7 +75,7 @@ function CategoriestList() {
     setSpinner(true); // Set spinner to true before making the API call
     try {
       if (!data.name || !/^[a-zA-Z0-9\s]+$/.test(data.name)) {
-        toast.error("Invalid category name.")
+        toast.error("Invalid category name.");
         return;
       }
       const response = await axios.post(
@@ -79,7 +94,9 @@ function CategoriestList() {
     } catch (error) {
       // Handle error
       console.log(error);
-      toast.error("An error occurred while adding the category. Please try again later.");
+      toast.error(
+        "An error occurred while adding the category. Please try again later."
+      );
     } finally {
       setSpinner(false); // Set spinner back to false after the API call completes
       handleClose();
@@ -131,7 +148,7 @@ function CategoriestList() {
   const Updateitem = async (data) => {
     try {
       if (!data.name || !/^[a-zA-Z0-9\s]+$/.test(data.name)) {
-        toast.error("Invalid category name.")
+        toast.error("Invalid category name.");
         return;
       }
       const response = await axios.put(
@@ -150,7 +167,9 @@ function CategoriestList() {
       toast.success("update is successfully");
     } catch (error) {
       // Handle error
-      toast.error("An error occurred while updating the category. Please try again later.");
+      toast.error(
+        "An error occurred while updating the category. Please try again later."
+      );
     } finally {
       setSpinner(false); // Set spinner back to false after the API call completes
       handleCloseshowModalUpdate();
@@ -158,10 +177,15 @@ function CategoriestList() {
       reset();
     }
   };
+  // functions for search and Filters
+  const SearchByName = (e) => {
+    setSearchName(e.target.value);
+    getData(1, 10, e.target.value);
+  };
 
   //  call data
   useEffect(() => {
-    getData();
+    getData(1, 5);
   }, []);
 
   return (
@@ -264,8 +288,24 @@ function CategoriestList() {
             </button>
           </div>
         </div>
+        <div className="row">
+          <div className="col-md-6 ">
+            <div className="input-group mb-3">
+              {/* <i className="fa-solid fa-magnifying-glass "></i> */}
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search By Name "
+                aria-label="Username"
+                onChange={(e) => {
+                  SearchByName(e);
+                }}
+              />
+            </div>
+          </div>
+        </div>
 
-        <table className=" table-responsive  text-center" >
+        <table className="table table-responsive  text-center">
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -273,7 +313,7 @@ function CategoriestList() {
               <th scope="col">actions</th>
             </tr>
           </thead>
-          <tbody >
+          <tbody>
             {categoriesList.length == 0 ? (
               <img src={imageNoData} alt="" />
             ) : (
@@ -310,6 +350,34 @@ function CategoriestList() {
             )}
           </tbody>
         </table>
+        <nav aria-label="Page navigation example">
+          <ul className="pagination">
+            <li className="page-item">
+              <a className="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">«</span>
+                <span className="sr-only">Previous</span>
+              </a>
+            </li>
+            {Pagination.map((pag) => {
+              return (
+                <li
+                  onClick={() => getData(pag, 5)}
+                  key={pag}
+                  className="page-item"
+                >
+                  <a className="page-link">{pag}</a>
+                </li>
+              );
+            })}
+
+            <li className="page-item">
+              <a className="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">»</span>
+                <span className="sr-only">Next</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </>
   );
