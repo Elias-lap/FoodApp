@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 function Header({ title, description, pathimage }) {
   return (
-    <div className="  container-fluid  container-header p-5 rounded-3 ">
+    <div className="  container-fluid  container-header p-5 rounded-3  ">
       <div className="row   justify-content-between  ">
         <div className=" col-md-5  d-flex align-items-center  justify-content-center ">
           <div className="body-content">

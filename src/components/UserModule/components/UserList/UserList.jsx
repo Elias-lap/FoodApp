@@ -63,13 +63,13 @@ function UserList() {
 
   //  call data
   useEffect(() => {
-    getData( 1 , 10);
+    getData( 1 , 20);
   }, []);
 
   return (
     <>
       <Header pathimage={image} title={RecipesItem} discrirtion={paragraph} />
-      <div className="container ">
+      <div className="container overflow-hidden">
         <div className="  mx-auto rounded-3 mt-3  w-100 ">
             <h3>User Table Details</h3>
             <h5>You can check all details</h5>
@@ -172,34 +172,34 @@ function UserList() {
             </div>
           </div>
           )}
-          <nav aria-label="Page navigation example">
-            <ul className="pagination">
-              <li className="page-item">
-                <a className="page-link" href="#" aria-label="Previous">
-                  <span aria-hidden="true">«</span>
-                  <span className="sr-only">Previous</span>
-                </a>
-              </li>
-              {Pagination.map((pag) => {
-                return (
-                  <li
-                    onClick={() => getData(pag, 10)}
-                    key={pag}
-                    className="page-item"
-                  >
-                    <a className="page-link">{pag}</a>
-                  </li>
-                );
-              })}
+         <nav aria-label=" Page navigation example ">
+          <ul className="pagination">
+            <li className="page-item">
+              <a className="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">«</span>
+                <span className="sr-only">Previous</span>
+              </a>
+            </li>
+            {Pagination.map((pag) => {
+              return (
+                <li
+                  onClick={() => getData(pag, 10)}
+                  key={pag}
+                  className="page-item"
+                >
+                  <a className="page-link">{pag}</a>
+                </li>
+              );
+            })}
 
-              <li className="page-item">
-                <a className="page-link" href="#" aria-label="Next">
-                  <span aria-hidden="true">»</span>
-                  <span className="sr-only">Next</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
+            <li className="page-item">
+              <a className="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">»</span>
+                <span className="sr-only">Next</span>
+              </a>
+            </li>
+          </ul>
+        </nav> 
         
       </div>
     </>
