@@ -128,46 +128,50 @@ function UserList() {
               <img className=" w-75 " src={imageNoData} alt="image" />
             </div>
           ) : (
-            <table className="table-responsive  text-center ">
-              <thead className="bg-info-subtle">
-                <tr className="bg-gray">
-                  <th scope="col"> #</th>
-                  <th scope="col"> Name</th>
-                  <th scope="col">Email</th>
-                  <th scope="col">Image</th>
-                  <th scope="col"></th>
-                  <th scope="col">Phone</th>
-                  <th scope="col">Country</th>
-                </tr>
-              </thead>
-              <tbody>
-                {userList.map((user) => {
-                  return (
-                    <tr key={user.id}>
-                      <th scope="row">{user.id}</th>
-                      <td>{user.userName}</td>
-                      <td>{user.email}</td>
-                      <td className="w-10 text-center">
-                        {user.imagePath ? (
-                          <img
-                            className="w-100 h-100"
-                            src={`https://upskilling-egypt.com/${user.imagePath}`}
-                          ></img>
-                        ) : (
-                          // <i className="fa-solid fa-user-secret"></i>
-                          <div className="w-100 h-100">
-                            <NoDataImage />
-                          </div>
-                        )}
-                      </td>
-                      <td></td>
-                      <td>{user.phoneNumber}</td>
-                      <td>{user.country}</td>
+          <div className="container ">
+            <div className="table-responsive">
+                <table className="table  text-center ">
+                  <thead className="bg-info-subtle">
+                    <tr className="bg-gray">
+                      <th scope="col"> #</th>
+                      <th scope="col"> Name</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Image</th>
+                      <th scope="col"></th>
+                      <th scope="col">Phone</th>
+                      <th scope="col">Country</th>
                     </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                  </thead>
+                  <tbody>
+                    {userList.map((user) => {
+                      return (
+                        <tr key={user.id}>
+                          <th scope="row">{user.id}</th>
+                          <td>{user.userName}</td>
+                          <td>{user.email}</td>
+                          <td className="w-10 text-center">
+                            {user.imagePath ? (
+                              <img
+                                className="w-100 h-100"
+                                src={`https://upskilling-egypt.com/${user.imagePath}`}
+                              ></img>
+                            ) : (
+                              // <i className="fa-solid fa-user-secret"></i>
+                              <div className="w-100 h-100">
+                                <NoDataImage />
+                              </div>
+                            )}
+                          </td>
+                          <td></td>
+                          <td>{user.phoneNumber}</td>
+                          <td>{user.country}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+            </div>
+          </div>
           )}
           <nav aria-label="Page navigation example">
             <ul className="pagination">

@@ -305,51 +305,55 @@ function CategoriestList() {
           </div>
         </div>
 
-        <table className=" table-responsive table  text-center">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Category Name</th>
-              <th scope="col">actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {categoriesList.length == 0 ? (
-              <img src={imageNoData} alt="" />
-            ) : (
-              categoriesList.map((item) => {
-                return (
-                  <tr key={item.id}>
-                    <th scope="row">{item.id}</th>
-                    <td>{item.name}</td>
-                    <td>
-                      <button
-                        onClick={() => {
-                          handleShowshowModalUpdate(item.name),
-                            setDeleteItemId(item.id);
-                          setNameItem(item.name);
-                        }}
-                        className="btn btn-success me-1 mb-1"
-                      >
-                        update
-                        <i className=" ms-1 fa-solid fa-pen-to-square"></i>
-                      </button>
-                      <button
-                        className="btn btn-danger "
-                        onClick={() => {
-                          handleShowDelete(), setDeleteItemId(item.id);
-                        }}
-                      >
-                        Delete
-                        <i className=" ms-1 fa-solid fa-trash"></i>
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
+      <div className=" container ">
+        <div className="table-responsive ">
+            <table className="  table  text-center">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Category Name</th>
+                  <th scope="col">actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {categoriesList.length == 0 ? (
+                  <img src={imageNoData} alt="" />
+                ) : (
+                  categoriesList.map((item) => {
+                    return (
+                      <tr key={item.id}>
+                        <th scope="row">{item.id}</th>
+                        <td>{item.name}</td>
+                        <td>
+                          <button
+                            onClick={() => {
+                              handleShowshowModalUpdate(item.name),
+                                setDeleteItemId(item.id);
+                              setNameItem(item.name);
+                            }}
+                            className="btn btn-success me-1 mb-1"
+                          >
+                            update
+                            <i className=" ms-1 fa-solid fa-pen-to-square"></i>
+                          </button>
+                          <button
+                            className="btn btn-danger "
+                            onClick={() => {
+                              handleShowDelete(), setDeleteItemId(item.id);
+                            }}
+                          >
+                            Delete
+                            <i className=" ms-1 fa-solid fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+        </div>
+      </div>
         <nav aria-label="Page navigation example">
           <ul className="pagination">
             <li className="page-item">

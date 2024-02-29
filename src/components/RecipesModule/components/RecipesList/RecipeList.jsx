@@ -257,88 +257,92 @@ function RecipeList({ adminData }) {
           ) : (
             
               
-              <div className=" container">
-                  <table className=" table table-responsive text-center   ">
-                    <thead className="bg-info-subtle">
-                      <tr className="bg-gray">
-                        <th scope="col">#</th>
-                        <th scope="col">Item Name</th>
-                        <th scope="col">Image</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Descriptiopn</th>
-                        <th scope="col">tag</th>
-                        <th scope="col">Category</th>
-                        <th scope="col"></th>
-                      </tr>
-                    </thead>
-                    <tbody className=" text-center w-100 mx-auto">
-                      {RecipeList.map((recip) => {
-                        return (
-                          <tr key={recip.id}>
-                            <th scope="row">{recip.id}</th>
-                            <td>
-                              {recip?.name == "undefined"
-                                ? "Recipe"
-                                : recip?.name}
-                            </td>
-                            <td className="w-10 text-center">
-                              {recip.imagePath[0] ? (
-                                <img
-                                  className="w-100 h-100"
-                                  src={`https://upskilling-egypt.com/${recip.imagePath}`}
-                                ></img>
-                              ) : (
-                                // <i className="fa-solid fa-user-secret"></i>
-                                <div className="w-100 h-100">
-                                  <NoDataImage />
-                                </div>
-                              )}
-                            </td>
-                            <td>{recip?.price} $</td>
-                            <td> {recip.description}</td>
-                            <td> {recip.tag.name}</td>
-                            <td>{recip?.category[0]?.name}</td>
-                            <td>
-                              {adminData?.userGroup == "SystemUser" ? (
-                                <button
-                                  className=" btn "
-                                  onClick={() => onSubmitTofavorites(recip.id)}
-                                >
-                                  {" "}
-                                  <i className="fa-solid fa-heart text-danger"></i>
-                                </button>
-                              ) : (
-                                <div className="btn-group">
-                                  <button
-                                    className="btn btn-secondary  dropdown-toggle"
-                                    type="button"
-                                    data-bs-toggle="dropdown"
-                                    aria-expanded="false"
-                                  ></button>
-                                  <ul className="dropdown-menu ">
-                                    <div className="d-flex flex-column ">
-                                      <button
-                                        onClick={() => {
-                                          handleShowDelete();
-                                          setDeleteItemId(recip.id);
-                                        }}
-                                        className="fa fa-trash btn  "
-                                      ></button>
-                                      <Link
-                                        to={`/dashboard/CreatRecipes/${recip.id}`}
-                                        className="fa fa-pen-to-square btn"
-                                      ></Link>
-                                    </div>
-                                  </ul>
-                                </div>
-                              )}
-                            </td>
+            
+                <div className="container">
+                    <div className="table-responsive">
+                      <table className=" table   ">
+                        <thead className="bg-info-subtle">
+                          <tr className="bg-gray">
+                            <th scope="col">#</th>
+                            <th scope="col">Item Name</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Descriptiopn</th>
+                            <th scope="col">tag</th>
+                            <th scope="col">Category</th>
+                            <th scope="col"></th>
                           </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-              </div>
+                        </thead>
+                        <tbody className=" text-center w-100 mx-auto">
+                          {RecipeList.map((recip) => {
+                            return (
+                              <tr key={recip.id}>
+                                <th scope="row">{recip.id}</th>
+                                <td>
+                                  {recip?.name == "undefined"
+                                    ? "Recipe"
+                                    : recip?.name}
+                                </td>
+                                <td className="w-10 text-center">
+                                  {recip.imagePath[0] ? (
+                                    <img
+                                      className="w-100 h-100"
+                                      src={`https://upskilling-egypt.com/${recip.imagePath}`}
+                                    ></img>
+                                  ) : (
+                                    // <i className="fa-solid fa-user-secret"></i>
+                                    <div className="w-100 h-100">
+                                      <NoDataImage />
+                                    </div>
+                                  )}
+                                </td>
+                                <td>{recip?.price} $</td>
+                                <td> {recip.description}</td>
+                                <td> {recip.tag.name}</td>
+                                <td>{recip?.category[0]?.name}</td>
+                                <td>
+                                  {adminData?.userGroup == "SystemUser" ? (
+                                    <button
+                                      className=" btn "
+                                      onClick={() => onSubmitTofavorites(recip.id)}
+                                    >
+                                      {" "}
+                                      <i className="fa-solid fa-heart text-danger"></i>
+                                    </button>
+                                  ) : (
+                                    <div className="btn-group">
+                                      <button
+                                        className="btn btn-secondary  dropdown-toggle"
+                                        type="button"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false"
+                                      ></button>
+                                      <ul className="dropdown-menu ">
+                                        <div className="d-flex flex-column ">
+                                          <button
+                                            onClick={() => {
+                                              handleShowDelete();
+                                              setDeleteItemId(recip.id);
+                                            }}
+                                            className="fa fa-trash btn  "
+                                          ></button>
+                                          <Link
+                                            to={`/dashboard/CreatRecipes/${recip.id}`}
+                                            className="fa fa-pen-to-square btn"
+                                          ></Link>
+                                        </div>
+                                      </ul>
+                                    </div>
+                                  )}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                </div>
+            
             
             
           )}
