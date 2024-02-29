@@ -67,11 +67,10 @@ function UserList() {
   }, []);
 
   return (
-    <div>
+    <>
       <Header pathimage={image} title={RecipesItem} discrirtion={paragraph} />
-      <div className="container-fluid ">
-        <div className="row  mx-auto rounded-3 mt-3  justify-content-between ">
-          <div className="col-md-6">
+      <div className="container ">
+        <div className="  mx-auto rounded-3 mt-3  w-100 ">
             <h3>User Table Details</h3>
             <h5>You can check all details</h5>
           </div>
@@ -128,7 +127,7 @@ function UserList() {
               <img className=" w-75 " src={imageNoData} alt="image" />
             </div>
           ) : (
-          <div className="container ">
+          <div className="container  mt-3">
             <div className="table-responsive">
                 <table className="table  text-center ">
                   <thead className="bg-info-subtle">
@@ -201,9 +200,9 @@ function UserList() {
               </li>
             </ul>
           </nav>
-        </div>
+        
       </div>
-    </div>
+    </>
   );
 }
 
