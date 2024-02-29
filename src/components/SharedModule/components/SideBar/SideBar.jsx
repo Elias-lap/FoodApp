@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
@@ -7,8 +8,10 @@ import toggler from "../../../../assets/side.png";
 import { useState } from "react";
 import { Modal } from "react-bootstrap";
 import ChangePassword from "../../../AuthModule/components/ChangePassword/ChangePassword";
-function SideBar() {
+function SideBar({ adminData }) {
+  console.log(adminData?.userGroup);
   const [iscollapsed, setIscollapsed] = useState(false);
+
   const navigate = useNavigate();
   // handel Modal for Change Password
   const [show, setShow] = useState(false);
@@ -36,20 +39,25 @@ function SideBar() {
             </MenuItem>
 
             <MenuItem
+            
               icon={<i className="fa-solid fa-house"></i>}
               component={<Link to="/dashboard" />}
             >
               {" "}
               Home
             </MenuItem>
+            {adminData?.userGroup == "SuperAdmin" ? (
+              <MenuItem
+                icon={<i className="fa-solid fa-user" />}
+                component={<Link to="/dashboard/users" />}
+              >
+                {" "}
+                Users
+              </MenuItem>
+            ) : (
+              ""
+            )}
 
-            <MenuItem
-              icon={<i className="fa-solid fa-user" />}
-              component={<Link to="/dashboard/users" />}
-            >
-              {" "}
-              Users
-            </MenuItem>
             <MenuItem
               icon={<i className="fas fa-utensils" />}
               component={<Link to="/dashboard/RecipesList" />}
@@ -57,13 +65,29 @@ function SideBar() {
               {" "}
               Recipes
             </MenuItem>
-            <MenuItem
-              icon={<i className="fas fa-th-large"></i>}
-              component={<Link to="/dashboard/categoriesList" />}
-            >
-              {" "}
-              categories
-            </MenuItem>
+            {adminData?.userGroup == "SuperAdmin" ? (
+              <MenuItem
+                icon={<i className="fas fa-th-large"></i>}
+                component={<Link to="/dashboard/categoriesList" />}
+              >
+                {" "}
+                categories
+              </MenuItem>
+            ) : (
+              ""
+            )}
+            {adminData?.userGroup == "SystemUser" ? (
+              <MenuItem
+                icon={<i className="fa-solid fa-heart text-danger"></i>}
+                component={<Link to="/dashboard/Favorites" />}
+              >
+                {" "}
+                Favorites
+              </MenuItem>
+            ) : (
+              ""
+            )}
+
             <MenuItem
               onClick={handleShow}
               icon={<i className="fa-solid fa-unlock"></i>}
@@ -75,9 +99,11 @@ function SideBar() {
               className="mt-4"
               icon={<i className="fa-solid fa-right-from-bracket"></i>}
               onClick={() => {
-                localStorage.removeItem("adminToken"),
-                  navigate("/login"),
-                  toast.success("log out Done🙁");
+                localStorage.removeItem("adminToken");
+                // Use a callback to ensure that navigation occurs after the token is removed
+                localStorage.getItem("adminToken") === null &&
+                  navigate("/login");
+                toast.success("Log out Done🙁");
               }}
             >
               Log out

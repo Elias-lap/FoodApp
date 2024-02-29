@@ -72,7 +72,7 @@ function UserList() {
       <div className="container-fluid ">
         <div className="row  mx-auto rounded-3 mt-3  justify-content-between ">
           <div className="col-md-6">
-            <h3>Recipe Table Details</h3>
+            <h3>User Table Details</h3>
             <h5>You can check all details</h5>
           </div>
           <div className="row">
@@ -117,7 +117,7 @@ function UserList() {
                     <i className="fa-solid fa-caret-down  "></i>
                   </option>{" "}
                 <option value="1">admin</option>
-                <option value="1">user</option>
+                <option value="2">user</option>
                 
                 </select>
               </div>

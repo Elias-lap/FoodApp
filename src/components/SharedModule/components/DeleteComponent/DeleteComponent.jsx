@@ -20,7 +20,7 @@ function DeleteComponent({
       <Modal.Body>
         <div className="text-center">
           <img src={imageDelete} alt="" />
-          <h5>Delete This Category ?</h5>
+          <h5>Delete This item ?</h5>
           <p className="text-secondary">
             are you sure you want to delete this item ? if you are sure just
             click on delete it

@@ -5,14 +5,19 @@ import SideBar from "../SideBar/SideBar";
 
 // eslint-disable-next-line react/prop-types
 function MasterLayout({ adminData }) {
+  
   return (
-    <div className="d-flex  ">
-      <div className="home-sideBar"> 
-        <SideBar />
+    <div className="d-flex   ">
+      <div className="home-sideBar "> 
+        <SideBar adminData ={adminData} />  
       </div>
-      <div className="w-100">
-        <Navbar adminData={adminData} /> 
-        <Outlet />
+      <div className="w-100 ">
+      
+          <Navbar adminData={adminData} /> 
+      
+        
+          <Outlet />
+      
       </div>
     </div>
   );

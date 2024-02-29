@@ -305,7 +305,7 @@ function CategoriestList() {
           </div>
         </div>
 
-        <table className="table table-responsive  text-center">
+        <table className=" table-responsive table  text-center">
           <thead>
             <tr>
               <th scope="col">#</th>

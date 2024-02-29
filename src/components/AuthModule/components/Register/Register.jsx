@@ -66,6 +66,8 @@ function Register() {
       );
       // Handle success response
       console.log(response)
+      localStorage.setItem("adminToken", response?.data?.token);
+    
       toast.success(response.message);
       navigate('/VerifyEmail')
     } catch (error) {

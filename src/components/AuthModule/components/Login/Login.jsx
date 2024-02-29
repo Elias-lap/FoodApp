@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 
 // eslint-disable-next-line react/prop-types
-function Login({ saveAdminData }) {
+function Login({saveAdminData} ) {
   // for password
   const [showPassword, setShowPassword] = useState(false);
 
@@ -35,8 +35,9 @@ function Login({ saveAdminData }) {
       // Handle success response
       localStorage.setItem("adminToken", response?.data?.token);
       toast.success("Login successfully");
+      // Navigate to dashboard only after setting the token
       navigate("/dashboard");
-      saveAdminData();
+      saveAdminData()
     } catch (error) {
       // Handle error
       toast.error(error.response.data.message);

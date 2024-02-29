@@ -18,12 +18,14 @@ import ResetPassword from "./components/AuthModule/components/ResetPassword/Rese
 import CreatRecipes from "./components/SharedModule/components/CreatReacipes/CreatRecipes";
 import Register from "./components/AuthModule/components/Register/Register";
 import VerifyEmail from "./components/AuthModule/components/verfyEmail/VerifyEmail";
+import Favorites from "./components/UserModule/components/favourie/Favorites";
 function App() {
   const [adminData, setAdminData] = useState(null);
   const saveAdminData = () => {
     let encodedToken = localStorage.getItem("adminToken");
     let decodedToken = jwtDecode(encodedToken);
     setAdminData(decodedToken);
+    
   };
  
   useEffect(() => {
@@ -44,11 +46,11 @@ function App() {
       children: [
         {
           index: true,
-          element: <Login saveAdminData={saveAdminData} />,
+          element: <Login saveAdminData={saveAdminData}  />,
         },
         {
           path: "login",
-          element: <Login />,
+          element: <Login saveAdminData={saveAdminData}  />,
         },
         {
           path: "Register",
@@ -83,7 +85,11 @@ function App() {
         },
         {
           path: "RecipesList",
-          element: <RecipesList />,
+          element: <RecipesList adminData={adminData}  />,
+        },
+        {
+          path: "Favorites",
+          element: <Favorites adminData={adminData} />,
         },
         {
           path: "users",

@@ -27,6 +27,9 @@
   height: 60px;
 
 }
+.h-fixed {
+  height: 230px;
+}
 /* styled side bar */
 .home-sideBar{
   background-color: #1F263E;
