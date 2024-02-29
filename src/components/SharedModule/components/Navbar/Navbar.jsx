@@ -24,7 +24,7 @@ function Navbar({ adminData }) {
           >
             <form className="d-flex  flex-grow-1 " role="search">
               <input
-                className="form-control me-2 w-60  mb-2"
+                className="form-control me-2 w-60  m-2"
                 type="search"
                 placeholder="Search"
                 aria-label="Search"
