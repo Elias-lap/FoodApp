@@ -260,9 +260,10 @@ function RecipeList({ adminData }) {
             
                 <div className="container">
                     <div className="table-responsive">
-                      <table className=" table   ">
-                        <thead className="bg-info-subtle">
+                      <table className=" table text-center  ">
+                        <thead className="bg-info-subtle ">
                           <tr className="bg-gray">
+                          
                             <th scope="col">#</th>
                             <th scope="col">Item Name</th>
                             <th scope="col">Image</th>
@@ -273,11 +274,11 @@ function RecipeList({ adminData }) {
                             <th scope="col"></th>
                           </tr>
                         </thead>
-                        <tbody className=" text-center w-100 mx-auto">
+                        <tbody className=" text-center w-100 ">
                           {RecipeList.map((recip) => {
                             return (
-                              <tr key={recip.id}>
-                                <th scope="row">{recip.id}</th>
+                              <tr className="text-center" key={recip.id}>
+                                <td scope="row">{recip.id}</td>
                                 <td>
                                   {recip?.name == "undefined"
                                     ? "Recipe"
