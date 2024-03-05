@@ -214,7 +214,7 @@ function Register() {
                     <input
                       type={showPassword2 ? "text" : "password"}
                       className="form-control"
-                      placeholder="New password"
+                      placeholder="confirm password"
                       {...register("confirmPassword", {
                         required: "password is required ",
                         validate: validatePasswordMatch,
@@ -241,9 +241,11 @@ function Register() {
                     <span className="input-group-text" id="basic-addon1">
                       <i className="fa-solid fa-envelope" />
                     </span>
+                    <label htmlFor="profileImage" className=" mt-2 mx-1">Profile Image:</label>
                     <input
                       type="file"
                       className="form-control"
+                      id="profileImage"
                       placeholder="Enter your profileImage"
                       {...register("profileImage", {
                       })}
